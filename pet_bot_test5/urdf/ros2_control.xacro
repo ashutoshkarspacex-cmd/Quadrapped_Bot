@@ -1,0 +1,287 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ========================================================= -->
+  <!--                    ROS 2 CONTROL                         -->
+  <!-- ========================================================= -->
+
+  <ros2_control name="PetBotSystem" type="system">
+
+    <hardware>
+      <plugin>ign_ros2_control/IgnitionSystem</plugin>
+    </hardware>
+
+    <!-- ================= FRONT LEFT LEG ================= -->
+
+    <joint name="servoroterf1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="upperlegf1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="lowerlegf1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <!-- ================= FRONT RIGHT LEG ================= -->
+
+    <joint name="servoroterf2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="upperlegf2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="lowerlegf2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <!-- ================= REAR LEFT LEG ================= -->
+
+    <joint name="servoroter1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="upperlegb1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="lowerlegb1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <!-- ================= REAR RIGHT LEG ================= -->
+
+    <joint name="servoroterb2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="upperlegb2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="lowerlegb2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+  </ros2_control>
+
+
+  <!-- ========================================================= -->
+  <!--                     TRANSMISSIONS                         -->
+  <!-- ========================================================= -->
+
+  <!-- FRONT LEFT -->
+
+  <transmission name="trans_servoroterf1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="servoroterf1">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="servoroterf1_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_upperlegf1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="upperlegf1">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="upperlegf1_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_lowerlegf1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="lowerlegf1">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="lowerlegf1_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <!-- FRONT RIGHT -->
+
+  <transmission name="trans_servoroterf2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="servoroterf2">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="servoroterf2_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_upperlegf2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="upperlegf2">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="upperlegf2_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_lowerlegf2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="lowerlegf2">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="lowerlegf2_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <!-- REAR LEFT -->
+
+  <transmission name="trans_servoroter1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="servoroter1">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="servoroter1_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_upperlegb1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="upperlegb1">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="upperlegb1_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_lowerlegb1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="lowerlegb1">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="lowerlegb1_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <!-- REAR RIGHT -->
+
+  <transmission name="trans_servoroterb2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="servoroterb2">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="servoroterb2_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_upperlegb2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="upperlegb2">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="upperlegb2_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="trans_lowerlegb2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="lowerlegb2">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+    </joint>
+    <actuator name="lowerlegb2_motor">
+      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <!-- ========================================================= -->
+  <!--                 IGN ROS 2 CONTROL PLUGIN                  -->
+  <!-- ========================================================= -->
+
+  <gazebo>
+    <plugin
+      filename="libign_ros2_control-system.so"
+      name="ign_ros2_control::IgnitionROS2ControlPlugin">
+
+      <parameters>
+        $(find pet_bot_test5)/config/pet_bot_controllers.yaml
+      </parameters>
+
+    </plugin>
+  </gazebo>
+
+
+  <!-- ========================================================= -->
+  <!--                    ODOMETRY PLUGIN                        -->
+  <!-- ========================================================= -->
+
+  <gazebo>
+    <plugin
+      filename="libignition-gazebo-odometry-publisher-system.so"
+      name="ignition::gazebo::systems::OdometryPublisher">
+
+      <odom_frame>odom</odom_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+
+      <odom_topic>/odom</odom_topic>
+
+      <publish_odometry>true</publish_odometry>
+      <publish_tf>true</publish_tf>
+
+      <update_rate>50</update_rate>
+
+    </plugin>
+  </gazebo>
+
+</robot>

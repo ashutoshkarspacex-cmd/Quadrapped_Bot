@@ -3,7 +3,10 @@
      Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
-  name="pet_bot_test5">
+  name="pet_bot_test5"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find pet_bot_test5)/urdf/ros2_control.xacro"/>
+  <xacro:include filename="$(find pet_bot_test5)/urdf/sensors.xacro"/>
   <link
     name="base_link">
     <inertial>
@@ -270,6 +273,14 @@
       effort="30.0"
       velocity="5.0" />
   </joint>
+  <link name="footb1_Link">
+  </link>
+
+  <joint name="footb1_fixed_joint" type="fixed">
+    <parent link="lowerlegb1_Link"/>
+    <child link="footb1_Link"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+  </joint>
   <link
     name="servof1_Link">
     <inertial>
@@ -496,6 +507,14 @@
       upper="1.57"
       effort="30.0"
       velocity="5.0" />
+  </joint>
+  <link name="footf1_Link">
+  </link>
+
+  <joint name="footf1_fixed_joint" type="fixed">
+    <parent link="lowerlegf1_Link"/>
+    <child link="footf1_Link"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
   </joint>
   <link
     name="servof2_Link">
@@ -724,6 +743,14 @@
       effort="30.0"
       velocity="5.0" />
   </joint>
+  <link name="footf2_Link">
+  </link>
+
+  <joint name="footf2_fixed_joint" type="fixed">
+    <parent link="lowerlegf2_Link"/>
+    <child link="footf2_Link"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+  </joint>
   <link
     name="servob2_Link">
     <inertial>
@@ -951,8 +978,51 @@
       effort="30.0"
       velocity="5.0" />
   </joint>
+  <link name="footb2_Link">
+  </link>
 
-  <link name="depth_camera">
+  <joint name="footb2_fixed_joint" type="fixed">
+    <parent link="lowerlegb2_Link"/>
+    <child link="footb2_Link"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+  </joint>
+
+  <link name="lidar_link">
+
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="0.04"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder radius="0.03" length="0.04"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0 0 0"/>
+      <inertia
+        ixx="0.0001" ixy="0" ixz="0"
+        iyy="0.0001" iyz="0"
+        izz="0.0001"/>
+    </inertial>
+
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+  <parent link="base_link"/>
+  <child link="lidar_link"/>
+
+  <origin xyz="0 0 0.03" rpy="0 0 0"/>
+</joint>
+
+<link name="depth_camera">
 
     <visual>
       <geometry>
@@ -985,296 +1055,6 @@
     <child link="depth_camera"/>
     <origin xyz="0.003 -0.13 0.030" rpy="0 0 -1.57"/>
   </joint>
-
-
-  <!-- ROS 2 Control Hardware Interface for Ignition -->
-  <ros2_control name="PetBotSystem" type="system">
-    <hardware>
-       <plugin>ign_ros2_control/IgnitionSystem</plugin>
-    </hardware>
-
-    <!-- Front Left Leg -->
-    <joint name="servoroterf1">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <joint name="upperlegf1">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <joint name="lowerlegf1">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <!-- Front Right Leg -->
-    <joint name="servoroterf2">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <joint name="upperlegf2">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <joint name="lowerlegf2">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <!-- Rear Left Leg -->
-    <joint name="servoroter1">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <joint name="upperlegb1">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <joint name="lowerlegb1">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <!-- Rear Right Leg -->
-    <joint name="servoroterb2">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <joint name="upperlegb2">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <joint name="lowerlegb2">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-  </ros2_control>
-
-  <!--camera link sensor-->
-
-  <gazebo reference="depth_camera">
-
-    <sensor name="depth_camera" type="depth_camera">
-
-      <always_on>true</always_on>
-      <update_rate>10</update_rate>
-      <visualize>true</visualize>
-
-      <camera>
-        <horizontal_fov>1.047</horizontal_fov>
-
-        <image>
-          <width>640</width>
-          <height>480</height>
-          <!-- <format>R8G8B8</format> -->
-        </image>
-
-        <clip>
-          <near>0.1</near>
-          <far>10.0</far>
-        </clip>
-      </camera>
-
-      <depth_camera>
-        <output>depth</output>
-      </depth_camera>
-
-      <topic>/depth_camera</topic>
-
-    </sensor>
-
-  </gazebo>
-
-  <!-- ================== TRANSMISSIONS FOR ALL 12 JOINTS ================== -->
-
-  <!-- FRONT LEFT LEG -->
-  <transmission name="trans_servoroterf1">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="servoroterf1">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="servoroterf1_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="trans_upperlegf1">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="upperlegf1">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="upperlegf1_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="trans_lowerlegf1">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="lowerlegf1">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="lowerlegf1_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <!-- FRONT RIGHT LEG -->
-  <transmission name="trans_servoroterf2">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="servoroterf2">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="servoroterf2_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="trans_upperlegf2">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="upperlegf2">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="upperlegf2_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="trans_lowerlegf2">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="lowerlegf2">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="lowerlegf2_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <!-- REAR LEFT LEG -->
-  <transmission name="trans_servoroter1">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="servoroter1">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="servoroter1_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="trans_upperlegb1">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="upperlegb1">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="upperlegb1_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="trans_lowerlegb1">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="lowerlegb1">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="lowerlegb1_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <!-- REAR RIGHT LEG -->
-  <transmission name="trans_servoroterb2">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="servoroterb2">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="servoroterb2_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="trans_upperlegb2">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="upperlegb2">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="upperlegb2_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="trans_lowerlegb2">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="lowerlegb2">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-    </joint>
-    <actuator name="lowerlegb2_motor">
-      <hardwareInterface>hardware_interface/PositionCommandInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <gazebo>
-    <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-          <parameters>$(find pet_bot_test5)/config/pet_bot_controllers.yaml</parameters>
-    </plugin>
-  </gazebo>
-
-  <gazebo>
-    <plugin
-        filename="libignition-gazebo-odometry-publisher-system.so"
-        name="ignition::gazebo::systems::OdometryPublisher">
-
-        <odom_frame>odom</odom_frame>
-        <robot_base_frame>base_link</robot_base_frame>
-
-        <odom_topic>/odom</odom_topic>
-
-        <publish_odometry>true</publish_odometry>
-        <publish_tf>true</publish_tf>
-
-        <update_rate>50</update_rate>
-
-    </plugin>
-  </gazebo>
-
-
-   
-  <gazebo>
-    <plugin
-        filename="ignition-gazebo-sensors-system"
-        name="ignition::gazebo::systems::Sensors">
-        <render_engine>ogre2</render_engine>
-    </plugin>
-  </gazebo>
+  
 
 </robot>

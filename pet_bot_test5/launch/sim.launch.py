@@ -1,126 +1,215 @@
 import os
+
 from ament_index_python.packages import get_package_share_directory
+
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, TimerAction, LogInfo
 from launch_ros.actions import Node
+
 from launch.substitutions import Command, PathJoinSubstitution
 from launch_ros.parameter_descriptions import ParameterValue
 
+
 def generate_launch_description():
+
     package_name = 'pet_bot_test5'
     xacro_file_name = 'pet_bot_test5.urdf.xacro'
 
+    # ============================================================
+    # PACKAGE PATHS
+    # ============================================================
+
     pkg_share = get_package_share_directory(package_name)
-    world_file = os.path.join(pkg_share, 'worlds', 'debug_world.sdf')
-    controllers_yaml = os.path.join(pkg_share, 'config', 'pet_bot_controllers.yaml')
 
-    info = LogInfo(msg='[sim_12_joints.launch] Launching Ignition + Whole Body Controller')
+    world_file = os.path.join(
+        pkg_share,
+        'worlds',
+        'small_warehouse_fixed.world'
+    )
 
-    # Launch Ignition
+    bridge_yaml = os.path.join(
+        pkg_share,
+        'config',
+        'bridge.yaml'
+    )
+
+
+    # ============================================================
+    # INFO
+    # ============================================================
+
+    info = LogInfo(
+        msg='[sim.launch.py] Launching PetBot simulation'
+    )
+
+
+    # ============================================================
+    # IGNITION GAZEBO
+    # ============================================================
+
     gazebo = ExecuteProcess(
-        cmd=['ign', 'gazebo', '-r', '-v', '4', world_file],
+        cmd=[
+            'ign',
+            'gazebo',
+            '-r',
+            '-v',
+            '4',
+            world_file
+        ],
         output='screen'
     )
 
-    # Publish robot_description via xacro
+
+    # ============================================================
+    # ROBOT STATE PUBLISHER
+    # ============================================================
+
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='screen',
-        parameters=[{
-            'use_sim_time': True,
-            'robot_description': ParameterValue(
-                Command([
-                    'xacro ',
-                    PathJoinSubstitution([pkg_share, 'urdf', xacro_file_name])
-                ]),
-                value_type=str
-            )
-        }]
+
+        parameters=[
+            {
+                'use_sim_time': True,
+
+                'robot_description': ParameterValue(
+                    Command([
+                        'xacro ',
+                        PathJoinSubstitution([
+                            pkg_share,
+                            'urdf',
+                            xacro_file_name
+                        ])
+                    ]),
+                    value_type=str
+                )
+            }
+        ]
     )
 
-    # Spawn the robot after the world is up
+
+    # ============================================================
+    # SPAWN ROBOT
+    # ============================================================
+
     spawn_entity = TimerAction(
         period=6.0,
+
         actions=[
             ExecuteProcess(
                 cmd=[
-                    'ros2', 'run', 'ros_ign_gazebo', 'create',
-                    '-world', 'default',
-                    '-name', 'pet_bot_test5',
-                    '-topic', 'robot_description',
-                    '-x', '0', '-y', '0', '-z', '0.3' 
+                    'ros2',
+                    'run',
+                    'ros_ign_gazebo',
+                    'create',
+
+                    '-world',
+                    'default',
+
+                    '-name',
+                    'pet_bot_test5',
+
+                    '-topic',
+                    'robot_description',
+
+                    '-x',
+                    '0',
+                    '-y',
+                    '0',
+                    '-z',
+                    '0.3'
                 ],
+
                 output='screen'
             )
         ]
     )
 
-    # Spawner for joint_state_broadcaster
+
+    # ============================================================
+    # JOINT STATE BROADCASTER
+    # ============================================================
+
     load_joint_state_broadcaster = TimerAction(
         period=15.0,
+
         actions=[
             Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
-                output="screen"
+                package='controller_manager',
+                executable='spawner',
+
+                arguments=[
+                    'joint_state_broadcaster',
+                    '--controller-manager',
+                    '/controller_manager'
+                ],
+
+                output='screen'
             )
         ]
     )
 
-    # --- CHANGED: Spawner for WHOLE BODY controller ---
+
+    # ============================================================
+    # WHOLE BODY POSITION CONTROLLER
+    # ============================================================
+
     load_forward_position_controller = TimerAction(
         period=16.0,
+
         actions=[
             Node(
-                package="controller_manager",
-                executable="spawner",
-                # This matches the new YAML file name
-                arguments=["forward_position_controller", "--controller-manager", "/controller_manager"],
-                output="screen"
+                package='controller_manager',
+                executable='spawner',
+
+                arguments=[
+                    'forward_position_controller',
+                    '--controller-manager',
+                    '/controller_manager'
+                ],
+
+                output='screen'
             )
         ]
     )
 
-    # Bridge Gazebo pose to ROS
     bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+
         arguments=[
-            "/model/pet_bot_test5/pose@geometry_msgs/msg/PoseArray@gz.msgs.Pose_V"
+            '--ros-args',
+            '-p',
+            f'config_file:={bridge_yaml}'
         ],
-        output="screen"
+
+        output='screen'
     )
 
-    camera_bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
-        arguments=[
-            "/depth_camera@sensor_msgs/msg/Image@ignition.msgs.Image"
-        ],
-        output="screen"
-    )
 
-    point_cloud_bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
-        arguments=[
-            "/depth_camera/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked"
-        ],
-        output="screen"
-    )
-
+    # ============================================================
+    # LAUNCH DESCRIPTION
+    # ============================================================
 
     return LaunchDescription([
+
         info,
+
+        # Gazebo
         gazebo,
+
+        # TF / robot description
         robot_state_publisher,
+
+        # Spawn robot
         spawn_entity,
+
+        # Controllers
         load_joint_state_broadcaster,
         load_forward_position_controller,
-        bridge,
-        camera_bridge,
-        point_cloud_bridge
+
+        # All ROS <-> Gazebo bridges
+        bridge
     ])
