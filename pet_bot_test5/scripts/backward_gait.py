@@ -9,18 +9,16 @@ from std_msgs.msg import Float64MultiArray
 # ============================================================
 L1 = 0.08
 L2 = 0.08
-
 # ============================================================
 # GAIT PARAMETERS
 # ============================================================
 RATE = 50.0
 CYCLE_TIME = 1.0
-STEP_LENGTH = 0.035
+STEP_LENGTH = 0.06
 STEP_HEIGHT = 0.03
-BODY_HEIGHT = 0.14
+BODY_HEIGHT = 0.12
 DIRECTION = -1          # backward
 STARTUP_HOLD = 1.0
-
 # ============================================================
 # LEGS
 # ============================================================
@@ -50,19 +48,17 @@ def leg_ik(x, z):
 
     thigh = phi + alpha - math.pi / 2
     return thigh, knee
-
 # ============================================================
 # FOOT TRAJECTORY (BODY FRAME)
 # ============================================================
 def foot_position(s, swing):
     if swing:
         x = DIRECTION * (-STEP_LENGTH / 2 + STEP_LENGTH * s)
-        z = BODY_HEIGHT - STEP_HEIGHT * math.sin(math.pi * s)
+        z = BODY_HEIGHT - STEP_HEIGHT * (math.sin(math.pi * s)**2)
     else:
         x = DIRECTION * (STEP_LENGTH / 2)
         z = BODY_HEIGHT
     return x, z
-
 # ============================================================
 # NODE
 # ============================================================
@@ -159,7 +155,7 @@ class HybridIKTrot_Backward(Node):
 
             # rear-leg load bias
             if leg in ["RL", "RR"]:
-                z += 0.005
+                z += 0.008
 
             thigh_ik, knee_ik = leg_ik(x, z)
 

@@ -10,7 +10,7 @@ find_package(xacro REQUIRED)
 # Install all necessary directories in one block
 # This ensures config/pet_bot_controllers.yaml is copied correctly
 install(
-  DIRECTORY launch urdf config meshes textures worlds
+  DIRECTORY launch urdf config meshes worlds
   DESTINATION share/${PROJECT_NAME}
 )
 

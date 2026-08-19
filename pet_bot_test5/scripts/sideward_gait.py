@@ -21,17 +21,14 @@ BODY_HEIGHT = 0.17
 SIDE_STEP = 0.03
 
 STARTUP_HOLD = 1.0
-
 # +1 = move LEFT
 # -1 = move RIGHT
 DIRECTION=1
-
 LEGS = ["FL", "FR", "RL", "RR"]
 LEG_INDEX = {"FL": 0, "FR": 3, "RL": 6, "RR": 9}
 
 SWING_A = ["FL", "RL"]
 SWING_B = ["FR", "RR"]
-
 # ============================================================
 # JOINT SIGN CORRECTIONS (VERY IMPORTANT)
 # ============================================================
