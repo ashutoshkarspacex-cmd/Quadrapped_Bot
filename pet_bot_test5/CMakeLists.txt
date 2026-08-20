@@ -25,6 +25,7 @@ install(PROGRAMS
   scripts/navigation.py
   scripts/gazebo_pose_reader.py
   scripts/rotational_gait.py
+  scripts/teleop_control.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

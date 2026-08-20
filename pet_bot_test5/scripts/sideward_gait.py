@@ -159,7 +159,7 @@ class SideWalk(Node):
         self.cycles = 0
         self.max_cycles = steps
 
-    def update(self):
+    def update(self,direction):
 
         now = self.get_clock().now().nanoseconds * 1e-9
         t = now - self.t0
@@ -180,8 +180,8 @@ class SideWalk(Node):
             self.get_logger().info("Sideways step complete")
             self.timer.cancel()
             return
-
-        if DIRECTION == 1:
+        DIRECTION=direction
+        if DIRECTION== 1:
 
             if phase < 0.25:
                 swing_legs = SWING_A
