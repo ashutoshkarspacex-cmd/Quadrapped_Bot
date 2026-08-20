@@ -30,11 +30,12 @@ class teleop_control(Node):
         self.rate=50.0
         self.timer=self.create_timer(1.0/self.rate,self.update)
         
-    def vel_callback(self,msg):
-        msg=Twist()
+    def vel_callback(self,msg:Twist):
+        
         self.vx=msg.linear.x
         self.vy=msg.linear.y
         self.wz=msg.angular.z
+        self.t0 = self.get_clock().now().nanoseconds * 1e-9
         
     def update(self):
         now=self.get_clock().now().nanoseconds * 1e-9    
