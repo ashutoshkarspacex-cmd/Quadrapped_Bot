@@ -1081,7 +1081,4 @@
 
   <origin xyz="0 0 0" rpy="0 0 0"/>
 </joint>
-
-  
-
 </robot>
