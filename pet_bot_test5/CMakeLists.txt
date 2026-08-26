@@ -26,6 +26,8 @@ install(PROGRAMS
   scripts/gazebo_pose_reader.py
   scripts/rotational_gait.py
   scripts/teleop_control.py
+  scripts/arduino_node.py
+  scripts/odom_frame.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
