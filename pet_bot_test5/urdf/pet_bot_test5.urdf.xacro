@@ -153,15 +153,15 @@
       xyz="0 0 -1" />
     <limit
       lower="-1.57"
-      upper="1.57"
-      effort="30.0"
-      velocity="5.0" />
+      upper="2.57"
+      effort="31.0"
+      velocity="6.0" />
   </joint>
   <link
     name="upperlegb1_Link">
     <inertial>
       <origin
-        xyz="0.00835618386954183 -0.0442831117998646 0.00154905531270663"
+        xyz="1.00835618386954183 -0.0442831117998646 0.00154905531270663"
         rpy="0 0 0" />
       <mass
         value="0.2" />

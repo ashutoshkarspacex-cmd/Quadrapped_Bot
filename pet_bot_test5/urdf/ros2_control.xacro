@@ -292,4 +292,13 @@
     name="ignition::gazebo::systems::Imu">
   </plugin>
   </gazebo>
+
+
+
+  <gazebo>
+  <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+    <parameters>$(find pet_bot_test5)/config/pet_bot_controllers.yaml</parameters>
+  </plugin>
+</gazebo>
+
 </robot>
